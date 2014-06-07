@@ -269,7 +269,7 @@ def create_cmakelists(package_template, rosdistro, meta=False):
         if message_pkgs:
             message_depends = '#   %s' % '#   '.join(message_pkgs)
         else:
-            message_depends = '#   std_msgs  # Or other packages containing msgs'
+            message_depends = '#   packages containing msgs'
         temp_dict = {'name': package_template.name,
                      'components': components,
                      'include_directories': _create_include_macro(package_template),
@@ -371,21 +371,30 @@ def create_package_xml(package_template, rosdistro, meta=False):
         return '  <%s %s>%s</%s>\n' % (tagname, email_string,
                                        person.name, tagname)
 
+    def make_comment(tag):
+        return '  <!--%s  -->\n' % (tag.rstrip('\n'))
+
     maintainers = []
     for maintainer in package_template.maintainers:
         maintainers.append(get_person_tag('maintainer', maintainer))
     temp_dict['maintainers'] = ''.join(maintainers)
 
     urls = []
-    for url in package_template.urls:
-        type_string = ("" if url.type is None
-                       else 'type="%s"' % url.type)
-        urls.append('    <url %s >%s</url>\n' % (type_string, url.url))
+    if len(package_template.urls) > 0:
+        for url in package_template.urls:
+            type_string = ("" if url.type is None
+                           else 'type="%s"' % url.type)
+            urls.append('    <url %s >%s</url>\n' % (type_string, url.url))
+    else:
+        urls.append(make_comment('  <url %s >%s</url>\n' % ('website', 'http://wiki.ors.org/%s' % temp_dict['name'] )))
     temp_dict['urls'] = ''.join(urls)
 
     authors = []
-    for author in package_template.authors:
-        authors.append(get_person_tag('author', author))
+    if (len(package_template.authors) > 0):
+        for author in package_template.authors:
+            authors.append(get_person_tag('author', author))
+    else:
+        authors.append(make_comment(get_person_tag('author', Person('author_name', 'author_email'))))
     temp_dict['authors'] = ''.join(authors)
 
     dependencies = []
@@ -399,21 +408,26 @@ def create_package_xml(package_template, rosdistro, meta=False):
     }
     for dep_type in ['buildtool_depend', 'build_depend', 'run_depend',
                      'test_depend', 'conflict', 'replace']:
-        for dep in sorted(dep_map[dep_type], key=lambda x: x.name):
-            if 'depend' in dep_type:
-                dep_tag = _create_depend_tag(
-                    dep_type,
-                    dep.name,
-                    dep.version_eq,
-                    dep.version_lt,
-                    dep.version_lte,
-                    dep.version_gt,
-                    dep.version_gte
-                    )
-                dependencies.append(dep_tag)
-            else:
-                dependencies.append(_create_depend_tag(dep_type,
-                                                       dep.name))
+        if len(dep_map[dep_type]) > 0:
+            for dep in sorted(dep_map[dep_type], key=lambda x: x.name):
+                if 'depend' in dep_type:
+                    dep_tag = _create_depend_tag(
+                        dep_type,
+                        dep.name,
+                        dep.version_eq,
+                        dep.version_lt,
+                        dep.version_lte,
+                        dep.version_gt,
+                        dep.version_gte
+                        )
+                    dependencies.append(dep_tag)
+                else:
+                    dependencies.append(_create_depend_tag(dep_type,
+                                                           dep.name))
+        else:
+            dependencies.append(make_comment(_create_depend_tag(dep_type, 'some_pkg')))
+        if dep_type is not 'replace':
+            dependencies.append('\n')
     temp_dict['dependencies'] = ''.join(dependencies)
 
     exports = []
