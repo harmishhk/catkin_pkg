@@ -82,7 +82,7 @@ class PackageTemplate(Package):
         for maintainer_name in maintainer_names:
             maintainers.append(
                 Person(maintainer_name,
-                       '%s@todo.todo' % maintainer_name.split()[-1])
+                       '%s@laas.fr' % maintainer_name.split()[0])
             )
         author_names = list(author_names or [])
         author_names.sort()
