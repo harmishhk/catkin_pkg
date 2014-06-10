@@ -219,6 +219,10 @@ def create_package_files(target_path, package_template, rosdistro,
         fname = os.path.join(target_path, 'src')
         os.makedirs(fname)
         print('Created folder %s' % os.path.relpath(fname, os.path.dirname(target_path)))
+    if 'dynamic_reconfigure' in package_template.catkin_deps:
+        fname = os.path.join(target_path, 'cfg')
+        os.makedirs(fname)
+        print('Created folder %s' % os.path.relpath(fname, os.path.dirname(target_path)))
 
 
 class CatkinTemplate(string.Template):
