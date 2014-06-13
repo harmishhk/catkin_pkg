@@ -263,12 +263,12 @@ def create_cmakelists(package_template, rosdistro, meta=False):
                 system_find_package += '# '
             system_find_package += 'find_package(%s REQUIRED)\n' % sysdep
         # provide dummy values
-        catkin_depends = (' '.join(package_template.catkin_deps)
-                          if package_template.catkin_deps
-                          else 'other_catkin_pkg')
-        system_depends = (' '.join(package_template.system_deps)
-                          if package_template.system_deps
-                          else 'system_lib')
+        catkin_depends = (''.join('#     %s\n' % dep for dep in package_template.catkin_deps)[:-1]
+                      if package_template.catkin_deps
+                      else '#     other_catkin_pkg')
+    	system_depends = (''.join('#     %s\n' % dep for dep in package_template.system_deps)[:-1]
+                      if package_template.system_deps
+                      else '#     system_lib')
         message_pkgs = [pkg for pkg in package_template.catkin_deps if pkg.endswith('_msgs')]
         if message_pkgs:
             message_depends = '#   %s' % '#   '.join(message_pkgs)
