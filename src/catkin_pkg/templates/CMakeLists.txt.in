@@ -23,19 +23,19 @@ find_package(catkin REQUIRED@components)
 ## install python modules and global scripts
 # catkin_python_setup()
 
-## add message, serviece and action files
+## add message, serviece and action files from msg, srv and action directories
 
-# add_message_files( DIRECTORY msg
+# add_message_files(
 #   FILES
 #     Message1.msg
 # )
 
-# add_service_files( DIRECTORY srv
+# add_service_files(
 #   FILES
 #     Service1.srv
 # )
 
-# add_action_files( DIRECTORY action
+# add_action_files(
 #   FILES
 #     Action1.action
 # )
@@ -46,9 +46,9 @@ find_package(catkin REQUIRED@components)
 @message_dependencies
 # )
 
-## add dynamic reconfigure configs
-# generate_dynamic_reconfigure_options( DIRECTORY cfg
-#   File1.cfg
+## add dynamic reconfigure config files from cfg directory
+# generate_dynamic_reconfigure_options(
+#   DynReconf1.cfg
 # )
 
 ## declare catkin package
@@ -69,23 +69,27 @@ catkin_package(
 
 @include_directories
 
-## declare a cpp library
+## declare a c++ library
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/@name.cpp
 # )
 
-## declare a cpp executable
+## cmake target dependencies of the c++ library
+# add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+## libraries to link the target c++ library against
+# target_link_libraries(${PROJECT_NAME}
+@target_libraries# )
+
+## declare a c++ executable
 # add_executable(${PROJECT_NAME}_node
 #   src/@{name}_node.cpp
 # )
 
-## cmake target dependencies of the executable/library
+## cmake target dependencies of the c++ executable
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-## build configure headers
-# add_dependencies(@{name}_node ${PROJECT_NAME}_gencfg)
-
-## libraries to link a library or executable target against
+## libraries to link the target c++ executable against
 # target_link_libraries(${PROJECT_NAME}_node
 @target_libraries# )
 
