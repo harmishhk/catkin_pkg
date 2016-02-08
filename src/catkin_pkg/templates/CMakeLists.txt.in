@@ -76,6 +76,9 @@ catkin_package(
 #   src/@{name}_node.cpp
 # )
 
+## rename c++ executable without prefix, for shorter version
+# set_target_properties(${PROJECT_NAME}_node PROPERTIES OUTPUT_NAME node PREFIX "")
+
 ## cmake target dependencies of the c++ executable
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
