@@ -50,6 +50,7 @@
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
+    <!-- <metapackage/> -->
     <!-- Other tools can request additional information be placed here -->
 @exports
   </export>
